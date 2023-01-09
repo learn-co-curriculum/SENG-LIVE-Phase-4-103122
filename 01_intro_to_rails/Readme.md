@@ -20,7 +20,7 @@ Flatiron Theater Company has hired us to build a web app. The app will have User
 	![production image here](./assets/MVC.png)   
 
 - Demo createing a rails app
-    - `rails _6.1.4_ new flatiron-theater --api --minimal` We will be working with rails 6.
+    - `rails new flatiron-theater --api --minimal` We will be working with rails 6.
     - Explore the file structure of the app and important files and folders.
 - Review rails generators 
 	- `rails g`
