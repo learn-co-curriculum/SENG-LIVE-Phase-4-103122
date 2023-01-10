@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  #resources :productions, only: [:index, :show, :create, :update, :destroy]
+  #resources :productions
   # Custome Route 
   #get "/welcome", to: "productions#welcome"
  
