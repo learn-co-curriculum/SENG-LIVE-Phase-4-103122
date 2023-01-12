@@ -8,15 +8,7 @@ function ProductionDetail({deleteProduction}) {
   const params = useParams()
   const history = useHistory()
   useEffect(()=>{
-    //GET to '/productions/:id'
-    fetch(`/productions/${params.id}`)
-    .then(res => { 
-      if(res.ok){
-        res.json().then(data => setProduction(data))
-      } else {
-        res.json().then(data => setErrors(data.error))
-      }
-    })
+
   },[])
 
   function handleDelete(){
