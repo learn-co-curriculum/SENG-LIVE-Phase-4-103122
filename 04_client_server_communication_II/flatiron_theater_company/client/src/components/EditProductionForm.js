@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 
@@ -12,15 +12,24 @@ function EditProductionForm({updateProduction}) {
     director:'',
     description:''
   })
-  const {id} = useParams()
+  const [errors, setErrors] = useState(null)
+  const [notFound, setNotFound] = useState(null)
+  const params = useParams()
+  const history = useHistory()
   useEffect(() => {
-    fetch(`/productions/${id}`)
-    .then(res => res.json())
-    .then(setFormData)
+    fetch(`/productions/${params.id}`)
+    .then(res => {
+      if(res.ok){
+        res.json().then(setFormData)
+      } else {
+        res.json().then(e => setNotFound([e.errors]))
+      }
+    })
   },[])
 
   const handleChange = (e) => {
     const { name, value } = e.target
+    //title:'Cats'
     setFormData({ ...formData, [name]: value })
   }
 
@@ -28,10 +37,26 @@ function EditProductionForm({updateProduction}) {
   function onSubmit(e){
     e.preventDefault()
     //PATCH to `/productions/${id}`
+    fetch(`/productions/${params.id}`,{
+      method:'PATCH',
+      headers: {
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify(formData)
+    })
+    .then(res => {
+      if(res.ok){
+        res.json().then(data => history.push(`/productions/${data.id}`))
+      } else {
+        res.json().then(data => setErrors(Object.entries(data.errors).map(e => `${e[0]} ${e[1]}`)))
+      }
+    })
     
   }
+  if(notFound) return <h2>{notFound}</h2>
     return (
       <div className='App'>
+        {errors&& errors.map(e => <h2 style={{color:'red'}}>{e.toUpperCase()}</h2>)}
       <Form onSubmit={onSubmit}>
         <label>Title </label>
         <input type='text' name='title' value={formData.title} onChange={handleChange} />

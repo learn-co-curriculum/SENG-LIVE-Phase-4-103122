@@ -4,15 +4,38 @@ import styled from 'styled-components'
 
 function ProductionDetail({deleteProduction}) {
   const [production, setProduction] = useState({crew_members:[], performers_and_roles:[]})
-  
+  const [errors, setErrors] = useState(null)
   const params = useParams()
   const history = useHistory()
   useEffect(()=>{
+    console.log(params)
+    //productions/:id
+    //productions/1
+    fetch(`/productions/${params.id}`)
+    .then(res => {
+      //res.ok -> true if -> status 200 
+      if(res.ok){
+        res.json().then(setProduction)
+      } else {
+        res.json().then(e => setErrors(e.errors))
+      }
+    })
 
   },[])
 
   function handleDelete(){
     //DELETE to `/productions/${params.id}`
+    fetch(`/productions/${params.id}`,{
+      method:'DELETE'
+    })
+    .then(res => {
+      if(res.ok){
+        deleteProduction(production.id)
+        history.push('/')
+      } else {
+        res.json().then(e => setErrors(e.errors))
+      }
+    })
  
   }
   
@@ -20,6 +43,8 @@ function ProductionDetail({deleteProduction}) {
   const {id, title, budget, genre, image,description} = production 
   //Place holder data, will be replaced in the assosiations lecture. 
   const crew_members = ['Lily-Mai Harding', 'Cathy Luna', 'Tiernan Daugherty', 'Giselle Nava', 'Alister Wallis', 'Aishah Rowland', 'Keiren Bernal', 'Aqsa Parrish', 'Daanyal Laing', 'Hollie Haas']
+  
+  if(errors) return <h2>{errors}</h2>
   return (
       <CardDetail>
         <h1>{title}</h1>
@@ -73,3 +98,4 @@ function ProductionDetail({deleteProduction}) {
       margin-top:10px;
     }
   `
+

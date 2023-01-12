@@ -1,5 +1,6 @@
 import React, { useState} from 'react'
 import styled from 'styled-components'
+import {useHistory} from 'react-router-dom'
 
 
 function ProductionForm({addProduction}) {
@@ -11,6 +12,9 @@ function ProductionForm({addProduction}) {
     director:'',
     description:''
   })
+  const [errors, setErrors] = useState(null)
+  const history = useHistory()
+  console.log(history)
 
 
   const handleChange = (e) => {
@@ -21,11 +25,26 @@ function ProductionForm({addProduction}) {
   function onSubmit(e){
     e.preventDefault()
     //POST '/productions'
-   
+    fetch('/productions',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify(formData)
+    })
+    .then(res => {
+      if(res.ok){
+        res.json().then(data => history.push(`/productions/${data.id}`))
+      
+      }else{
+        res.json().then(data => setErrors(Object.entries(data.errors).map(e => `${e[0]} ${e[1]}`)))
+      }
+    })
+
   }
-  
     return (
       <div className='App'>
+        {errors&& errors.map(e => <h2 style={{color:'red'}}>{e.toUpperCase()}</h2>)}
       <Form onSubmit={onSubmit}>
         <label>Title </label>
         <input type='text' name='title' value={formData.title} onChange={handleChange} />
@@ -45,7 +64,7 @@ function ProductionForm({addProduction}) {
         <label>Description</label>
         <textarea type='text' rows='4' cols='50' name='description' value={formData.description} onChange={handleChange} />
       
-        <input type='submit' value='Update Production' />
+        <input type='submit' value='Create Production' />
       </Form>
       </div>
     )

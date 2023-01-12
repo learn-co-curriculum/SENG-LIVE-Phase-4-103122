@@ -3,7 +3,7 @@ class Production < ApplicationRecord
     validates :title, length: {maximum:50}
     validates :description, length: {in: 5...250}
     validates :budget, numericality: {greater_than: 0, message:'More Money Plzzz'}
-    validates :image, inclusion: {in: ['jpg', 'png'], message: "The file type must be an jpg or png"}
+    validates :image, format: {with: %r{.(jpg|png)\Z}i, message: "The file type must be an jpg or png"}
     validate :genre, :no_more_musicals
     
     def no_more_musicals
