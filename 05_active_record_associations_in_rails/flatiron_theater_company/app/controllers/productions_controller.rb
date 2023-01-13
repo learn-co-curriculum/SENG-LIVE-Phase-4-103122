@@ -9,6 +9,7 @@ class ProductionsController < ApplicationController
     def show
         production = Production.find(params[:id])
         render json: production, status: :ok
+        # render json: production, include: :cast_members, status: :ok
     end 
 
     def create
@@ -35,7 +36,7 @@ class ProductionsController < ApplicationController
     end 
 
     def render_unprocessable_entity(invalid)
-        render json: {errors: invalid.record.errors}, status: :unprocessable_entity
+        render json: {errors: ErrorSerializer.serialize(invalid.record.errors)}, status: :unprocessable_entity
     end 
 
      def render_not_found(error)

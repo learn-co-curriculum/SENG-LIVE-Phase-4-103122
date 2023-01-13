@@ -31,13 +31,12 @@ function ProductionForm({handlePost, addProduction}) {
         res.json().then(addProduction)
       } else {
         //Display errors
-        res.json().then(data => setErrors(Object.entries(data.errors).map(e => `${e[0]} ${e[1]}`)))
+        res.json().then(data => setErrors(data.errors))
       }
     })
   }
     return (
       <div className='App'>
-      {errors?errors.map(e => <div>{e}</div>):null}
       <Form onSubmit={onSubmit}>
         <label>Title </label>
         <input type='text' name='title' value={formData.title} onChange={handleChange} />
