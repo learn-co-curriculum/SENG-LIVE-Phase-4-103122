@@ -8,6 +8,16 @@ class UsersController < ApplicationController
         user = User.create!(user_params)
         render json: user, status: :created
     end 
+
+    def login
+        user = User.find_by(name:params[:name])
+        if user && user.authenticate(params[:password])
+            render json: user, status: :ok
+        else 
+            render json: {errors: 'Incorrect Username or Password'}, status: :unauthorized
+        end 
+    end 
+
     
     private 
 

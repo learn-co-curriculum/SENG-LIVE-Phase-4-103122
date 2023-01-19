@@ -9,6 +9,6 @@ class ApplicationController < ActionController::API
 
      def render_not_found(error)
         #confiure the response to work with the error handleng we have on the frontend. 
-        render json: {errors: {error.model => "Not Found"}}, status: :not_found
+        render json: {errors: {error.model => "#{error.model}: Not Found"}}, status: :not_found
     end 
 end
