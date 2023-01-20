@@ -12,16 +12,21 @@ function UserPage(){
         .then(res => {
             if(res.ok){
                 res.json().then(user => {
+                    console.log(user)
                     setUser(user)
                     setLoading(false)
+                
                 })
             }else {
-                res.json().then(data => setErrors(data.error))
+                res.json().then(data => {
+                    console.log(data)
+                    setErrors(data.error)
+                })
             }
         })
        
     },[])
-
+    console.log(user)
     if(loading) return <h1>Loading</h1>
     if(errors) return <h1>{errors}</h1>
     return (

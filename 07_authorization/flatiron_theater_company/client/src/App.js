@@ -14,10 +14,20 @@ import NotFound from './components/NotFound'
 function App() {
   const [productions, setProductions] = useState([])
   const [errors, setErrors] = useState(false)
-
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
-    fetchProductions()
+    fetch('/authorized')
+    .then(res => {
+      if(res.ok){
+        res.json().then(user => {
+          setUser(user)
+          fetchProductions()
+        })
+      }else {
+        res.json().then(() => setUser(null))
+      }
+    })
   },[])
 
   const fetchProductions = () => {
@@ -44,10 +54,17 @@ function App() {
   })
 
   const deleteProduction = (id) => setProductions(current => current.filter(p => p.id !== id)) 
-
+  const updateUser = (user) => console.log(user)
   
-  if(errors) return <h1>{errors}</h1>
 
+  if(errors) return <h1>{errors}</h1>
+  if(!user) return (
+    <>
+      <GlobalStyle />
+      <Navigation updateUser={updateUser}/>
+      <Login updateUser={updateUser}/>
+    </>
+  )
 
   return (
     <>

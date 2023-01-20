@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import {Form} from '../styled/Form'
 
-function Login() {
+function Login({updateUser}) {
     const [formData, setFormData] = useState({
         name:'',
         email:'',
@@ -29,6 +29,7 @@ function Login() {
             if(res.ok){
                 res.json().then(user => {
                     history.push(`/users/${user.id}`)
+                    updateUser(user)
                 })
             }else {
                 res.json().then(json => setErrors(json.errors))
